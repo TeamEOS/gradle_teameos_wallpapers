@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TeamEOS Art</string>
+    <string name="action_settings">Settings</string>
+    <string name="nav_drawer_recently_added">Recently Added</string>
+    <string name="toast_saved">Wallpaper saved to #</string>
+    <string name="toast_saved_failed">Sorry! Failed to save wallpaper</string>
+    <string name="toast_wallpaper_set">Wallpaper updated!</string>
+    <string name="toast_wallpaper_set_failed">Sorry! Unable to set wallpapaer</string>
+    <string name="splash_error">Unable to download wallpapers. Verify your internet connection!</string>
+    <string name="msg_unknown_error">Sorry! Unknown error occurred.</string>
+    <string name="msg_wall_fetch_error">Sorry! Unable to fetch wallpaper(s). Verify your internet connection!</string>
+
+    <string name="drawer_header_background">Drawer background</string>
+
+    <string name="close_content_drawer">Close the main menu</string>
+    <string name="open_content_drawer">Open the main menu</string>
+</resources>

@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "org.teameos.wallpapers"
+        minSdkVersion 21
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            applicationVariants.all { variant ->
+                appendVersionNameVersionCode(variant, defaultConfig)
+            }
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                appendVersionNameVersionCode(variant, defaultConfig)
+            }
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+    compile project(':volley')
+}
+
+def appendVersionNameVersionCode(variant, defaultConfig) {
+    variant.outputs.each { output ->
+        def file = output.outputFile
+        def fileName = defaultConfig.applicationId + "." + defaultConfig.versionName + "." + variant.name + ".apk"
+        String parent = file.parent
+        if( project.hasProperty('OUTPUT_DIR') && new File( (String)OUTPUT_DIR ).exists() ) {
+            parent = OUTPUT_DIR
+            output.outputFile = new File(parent, fileName)
+        } else {
+            output.outputFile = new File(file.parent, fileName)
+        }
+    }
+}
