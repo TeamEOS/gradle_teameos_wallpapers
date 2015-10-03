@@ -1,13 +1,10 @@
 package org.teameos.wallpapers;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
@@ -31,8 +28,6 @@ import org.teameos.wallpapers.app.AppController;
 import org.teameos.wallpapers.picasa.model.Wallpaper;
 import org.teameos.wallpapers.util.LogHelper;
 import org.teameos.wallpapers.util.Utils;
-
-import java.io.ByteArrayOutputStream;
 
 public class FullScreenViewActivity extends Activity implements OnClickListener {
     private static final String TAG = FullScreenViewActivity.class

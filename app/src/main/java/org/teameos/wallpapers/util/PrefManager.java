@@ -52,48 +52,12 @@ public class PrefManager {
 
     }
 
-    /**
-     * Storing google username
-     */
-    public void setGoogleUsername(String googleUsername) {
-        editor = pref.edit();
-
-        editor.putString(KEY_GOOGLE_USERNAME, googleUsername);
-
-        // commit changes
-        editor.apply();
-    }
-
     public String getGoogleUserName() {
         return pref.getString(KEY_GOOGLE_USERNAME, AppConst.PICASA_USER);
     }
 
-    /**
-     * store number of grid columns
-     */
-    public void setNoOfGridColumns(int columns) {
-        editor = pref.edit();
-
-        editor.putInt(KEY_NO_OF_COLUMNS, columns);
-
-        // commit changes
-        editor.apply();
-    }
-
     public int getNoOfGridColumns() {
         return pref.getInt(KEY_NO_OF_COLUMNS, AppConst.NUM_OF_COLUMNS);
-    }
-
-    /**
-     * storing gallery name
-     */
-    public void setGalleryName(String galleryName) {
-        editor = pref.edit();
-
-        editor.putString(KEY_GALLERY_NAME, galleryName);
-
-        // commit changes
-        editor.apply();
     }
 
     public String getGalleryName() {

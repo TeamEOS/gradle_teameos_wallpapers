@@ -46,10 +46,14 @@ public class GridFragment extends Fragment {
     private PrefManager pref;
 
     // Picasa JSON response node keys
-    private static final String TAG_FEED = "feed", TAG_ENTRY = "entry",
+    private static final String TAG_FEED = "feed",
+            TAG_ENTRY = "entry",
             TAG_MEDIA_GROUP = "media$group",
-            TAG_MEDIA_CONTENT = "media$content", TAG_IMG_URL = "url",
-            TAG_IMG_WIDTH = "width", TAG_IMG_HEIGHT = "height", TAG_ID = "id",
+            TAG_MEDIA_CONTENT = "media$content",
+            TAG_IMG_URL = "url",
+            TAG_IMG_WIDTH = "width",
+            TAG_IMG_HEIGHT = "height",
+            TAG_ID = "id",
             TAG_T = "$t";
 
     public GridFragment() {
@@ -84,7 +88,7 @@ public class GridFragment extends Fragment {
         }
 
         // Preparing the request url
-        String url = null;
+        String url;
         if (selectedAlbumId == null) {
             // Recently added album url
             url = AppConst.URL_RECENTLY_ADDED.replace("_PICASA_USER_",

@@ -65,15 +65,21 @@ public class Utils {
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 pref.getGalleryName());
-
-        myDir.mkdirs();
+        boolean mkdirs = myDir.mkdirs();
+        if (!mkdirs) {
+            throw new RuntimeException("Cannot create folder" + myDir.getAbsolutePath());
+        }
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
         String fname = "Wallpaper-" + n + ".png";
         File file = new File(myDir, fname);
-        if (file.exists())
-            file.delete();
+        if (file.exists()) {
+            boolean fileDel = file.delete();
+            if (!fileDel) {
+                throw new RuntimeException("Cannot create folder" + file.getAbsolutePath());
+            }
+        }
         try {
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -115,7 +121,6 @@ public class Utils {
         try {
             return wallpaperManager.getDesiredMinimumWidth();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return 0;
@@ -127,7 +132,6 @@ public class Utils {
         try {
             return wallpaperManager.getDesiredMinimumHeight();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return 0;
