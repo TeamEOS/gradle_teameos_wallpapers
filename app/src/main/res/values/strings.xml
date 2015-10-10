@@ -16,4 +16,10 @@
 
     <string name="close_content_drawer">Close the main menu</string>
     <string name="open_content_drawer">Open the main menu</string>
+
+    <string name="permissions_not_granted">Permissions were not granted.</string>
+    <string name="permission_storage_rationale">Storage permissions are needed to allow saving wallpapers.</string>
+    <string name="permision_available_storage">Storage Permissions have been granted. Wallpaper can now be saved.</string>
+
+    <string name="ok">OK</string>
 </resources>

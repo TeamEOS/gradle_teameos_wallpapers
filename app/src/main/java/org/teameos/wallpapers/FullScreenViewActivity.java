@@ -1,12 +1,16 @@
 package org.teameos.wallpapers;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -27,9 +31,11 @@ import org.json.JSONObject;
 import org.teameos.wallpapers.app.AppController;
 import org.teameos.wallpapers.picasa.model.Wallpaper;
 import org.teameos.wallpapers.util.LogHelper;
+import org.teameos.wallpapers.util.PermissionHelper;
 import org.teameos.wallpapers.util.Utils;
 
-public class FullScreenViewActivity extends Activity implements OnClickListener {
+public class FullScreenViewActivity extends Activity
+        implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = FullScreenViewActivity.class
             .getSimpleName();
     public static final String TAG_SEL_IMAGE = "selectedImage";
@@ -39,6 +45,10 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
     private FloatingActionButton fabSetWallpaper;
     private Utils utils;
     private ProgressBar pbLoader;
+
+    private static final int REQUEST_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private View mLayout;
 
     // Picasa JSON response node keys
     private static final String TAG_ENTRY = "entry",
@@ -50,6 +60,7 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_image);
+        mLayout = findViewById(R.id.main_content);
 
         fullImageView = (ImageView) findViewById(R.id.imgFullscreen);
         fabSetWallpaper = (FloatingActionButton) findViewById(R.id.fabSetWallpaper);
@@ -97,7 +108,7 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG,
+                LogHelper.d(TAG,
                         "Image full resolution json: "
                                 + response.toString());
                 try {
@@ -119,7 +130,7 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
                     final int width = mediaObj.getInt(TAG_IMG_WIDTH);
                     final int height = mediaObj.getInt(TAG_IMG_HEIGHT);
 
-                    Log.d(TAG, "Full resolution image. url: "
+                    LogHelper.d(TAG, "Full resolution image. url: "
                             + fullResolutionUrl + ", w: " + width
                             + ", h: " + height);
 
@@ -209,7 +220,7 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
         switch (v.getId()) {
             // button Download Wallpaper tapped
             case R.id.fabDownload:
-                utils.saveImageToSDCard(bitmap);
+                saveImageToSDCard(bitmap);
                 break;
             // button Set As Wallpaper tapped
             case R.id.fabSetWallpaper:
@@ -218,6 +229,71 @@ public class FullScreenViewActivity extends Activity implements OnClickListener 
             default:
                 break;
         }
+    }
 
+    public void saveImageToSDCard(Bitmap bitmap) {
+        // Verify that all required storage permissions have been granted.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Storage permissions have not been granted.
+            requestStoragePermissions();
+        } else {
+            // Storage permissions have been granted. Save wallpaper.
+            utils.saveImageToSDCard(bitmap);
+        }
+    }
+
+    /**
+     * Requests the Storage permissions.
+     * If the permission has been denied previously, a SnackBar will prompt the user to grant the
+     * permission, otherwise it is requested directly.
+     */
+    private void requestStoragePermissions() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // For example, if the request has been denied previously.
+
+            // Display a SnackBar with an explanation and a button to trigger the request.
+            Snackbar.make(mLayout, R.string.permission_storage_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ActivityCompat
+                                    .requestPermissions(FullScreenViewActivity.this, PERMISSIONS_STORAGE,
+                                            REQUEST_STORAGE);
+                        }
+                    })
+                    .show();
+        } else {
+            // Storage permissions have not been granted yet. Request them directly.
+            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_STORAGE);
+        }
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_STORAGE) {
+            if (PermissionHelper.verifyPermissions(grantResults)) {
+                Snackbar.make(mLayout, R.string.permision_available_storage,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                Snackbar.make(mLayout, R.string.permissions_not_granted,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
