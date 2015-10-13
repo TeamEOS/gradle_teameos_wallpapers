@@ -65,10 +65,13 @@ public class Utils {
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 pref.getGalleryName());
-        boolean mkdirs = myDir.mkdirs();
-        if (!mkdirs) {
-            throw new RuntimeException("Cannot create folder" + myDir.getAbsolutePath());
+        if (!myDir.exists()) {
+            boolean mkdirs = myDir.mkdirs();
+            if (!mkdirs) {
+                throw new RuntimeException("Cannot create folder" + myDir.getAbsolutePath());
+            }
         }
+
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
@@ -77,7 +80,7 @@ public class Utils {
         if (file.exists()) {
             boolean fileDel = file.delete();
             if (!fileDel) {
-                throw new RuntimeException("Cannot create folder" + file.getAbsolutePath());
+                throw new RuntimeException("Cannot delete file" + file.getAbsolutePath());
             }
         }
         try {
