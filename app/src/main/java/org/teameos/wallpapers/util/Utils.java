@@ -60,7 +60,7 @@ public class Utils {
         return columnWidth;
     }
 
-    public void saveImageToSDCard(Bitmap bitmap) {
+    public void saveImageToSDCard(Bitmap bitmap, String title) {
         File myDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -72,10 +72,14 @@ public class Utils {
             }
         }
 
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Wallpaper-" + n + ".png";
+        if (title == null) {
+            LogHelper.d(TAG, "No title found, generating one");
+            Random generator = new Random();
+            int n = 10000;
+            n = generator.nextInt(n);
+            title = n + ".png";
+        }
+        String fname = "Wallpaper-" + title;
         File file = new File(myDir, fname);
         if (file.exists()) {
             boolean fileDel = file.delete();

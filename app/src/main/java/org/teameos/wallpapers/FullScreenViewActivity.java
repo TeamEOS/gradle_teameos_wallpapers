@@ -36,9 +36,9 @@ import org.teameos.wallpapers.util.Utils;
 
 public class FullScreenViewActivity extends Activity
         implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
-    private static final String TAG = FullScreenViewActivity.class
-            .getSimpleName();
+    private static final String TAG = FullScreenViewActivity.class.getSimpleName();
     public static final String TAG_SEL_IMAGE = "selectedImage";
+    public static String imageTitle;
     private Wallpaper selectedPhoto;
     private ImageView fullImageView;
     private FloatingActionButton fabDownload;
@@ -53,8 +53,12 @@ public class FullScreenViewActivity extends Activity
     // Picasa JSON response node keys
     private static final String TAG_ENTRY = "entry",
             TAG_MEDIA_GROUP = "media$group",
-            TAG_MEDIA_CONTENT = "media$content", TAG_IMG_URL = "url",
-            TAG_IMG_WIDTH = "width", TAG_IMG_HEIGHT = "height";
+            TAG_MEDIA_CONTENT = "media$content",
+            TAG_IMG_URL = "url",
+            TAG_IMG_WIDTH = "width",
+            TAG_IMG_HEIGHT = "height",
+            TAG_IMG_TITLE = "media$title",
+            TAG_T = "$t";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +130,19 @@ public class FullScreenViewActivity extends Activity
                     String fullResolutionUrl = mediaObj
                             .getString(TAG_IMG_URL);
 
+                    JSONObject imgTitle = entry
+                            .getJSONObject(TAG_MEDIA_GROUP)
+                            .getJSONObject(TAG_IMG_TITLE);
+
+                    imageTitle = imgTitle.getString(TAG_T);
+
                     // image full resolution widht and height
                     final int width = mediaObj.getInt(TAG_IMG_WIDTH);
                     final int height = mediaObj.getInt(TAG_IMG_HEIGHT);
 
                     LogHelper.d(TAG, "Full resolution image. url: "
                             + fullResolutionUrl + ", w: " + width
-                            + ", h: " + height);
+                            + ", h: " + height + ", name: " + imageTitle);
 
                     ImageLoader imageLoader = AppController
                             .getInstance().getImageLoader();
@@ -220,7 +230,7 @@ public class FullScreenViewActivity extends Activity
         switch (v.getId()) {
             // button Download Wallpaper tapped
             case R.id.fabDownload:
-                saveImageToSDCard(bitmap);
+                saveImageToSDCard(bitmap, imageTitle);
                 break;
             // button Set As Wallpaper tapped
             case R.id.fabSetWallpaper:
@@ -231,7 +241,7 @@ public class FullScreenViewActivity extends Activity
         }
     }
 
-    public void saveImageToSDCard(Bitmap bitmap) {
+    public void saveImageToSDCard(Bitmap bitmap, String title) {
         // Verify that all required storage permissions have been granted.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -239,7 +249,7 @@ public class FullScreenViewActivity extends Activity
             requestStoragePermissions();
         } else {
             // Storage permissions have been granted. Save wallpaper.
-            utils.saveImageToSDCard(bitmap);
+            utils.saveImageToSDCard(bitmap, title);
         }
     }
 
