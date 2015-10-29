@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TeamEOS Art</string>
+    <string name="app_name">Walls</string>
     <string name="action_settings">Settings</string>
     <string name="nav_drawer_recently_added">Recently Added</string>
     <string name="toast_saved">Wallpaper saved to #</string>
