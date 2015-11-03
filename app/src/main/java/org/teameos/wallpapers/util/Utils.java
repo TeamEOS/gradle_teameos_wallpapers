@@ -5,10 +5,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import org.teameos.wallpapers.R;
 
@@ -18,13 +19,13 @@ import java.util.Random;
 
 public class Utils {
     private String TAG = Utils.class.getSimpleName();
-    private Context _context;
+    private Context mContext;
     private PrefManager pref;
 
     // constructor
     public Utils(Context context) {
-        this._context = context;
-        pref = new PrefManager(_context);
+        this.mContext = context;
+        pref = new PrefManager(mContext);
     }
 
     /*
@@ -33,7 +34,7 @@ public class Utils {
     @SuppressWarnings("deprecation")
     public int getScreenWidth() {
         int columnWidth;
-        WindowManager wm = (WindowManager) _context
+        WindowManager wm = (WindowManager) mContext
                 .getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
@@ -49,7 +50,7 @@ public class Utils {
         return columnWidth;
     }
 
-    public void saveImageToSDCard(Bitmap bitmap, String title) {
+    public void saveImageToSDCard(View view, Bitmap bitmap, String title) {
         File myDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -81,33 +82,28 @@ public class Utils {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
-            Toast.makeText(
-                    _context,
-                    _context.getString(R.string.toast_saved).replace("#",
+            Snackbar.make(view, mContext.getString(R.string.toast_saved).replace("#",
                             "\"" + pref.getGalleryName() + "\""),
-                    Toast.LENGTH_SHORT).show();
+                    Snackbar.LENGTH_SHORT).show();
             Log.d(TAG, "Wallpaper saved to: " + file.getAbsolutePath());
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(_context,
-                    _context.getString(R.string.toast_saved_failed),
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, mContext.getString(R.string.toast_saved_failed),
+                    Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    public void setAsWallpaper(Bitmap bitmap) {
+    public void setAsWallpaper(View view, Bitmap bitmap) {
         try {
-            WallpaperManager wm = WallpaperManager.getInstance(_context);
+            WallpaperManager wm = WallpaperManager.getInstance(mContext);
             wm.setBitmap(bitmap);
-            Toast.makeText(_context,
-                    _context.getString(R.string.toast_wallpaper_set),
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, mContext.getString(R.string.toast_wallpaper_set),
+                    Snackbar.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(_context,
-                    _context.getString(R.string.toast_wallpaper_set_failed),
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, mContext.getString(R.string.toast_wallpaper_set_failed),
+                    Snackbar.LENGTH_SHORT).show();
         }
     }
 }

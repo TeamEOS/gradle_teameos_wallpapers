@@ -3,11 +3,11 @@ package org.teameos.wallpapers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -27,15 +27,21 @@ import java.util.List;
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private ProgressBar pbLoader;
-    private static final String TAG_FEED = "feed", TAG_ENTRY = "entry",
-            TAG_GPHOTO_ID = "gphoto$id", TAG_T = "$t",
+    private static final String
+            TAG_FEED = "feed",
+            TAG_ENTRY = "entry",
+            TAG_GPHOTO_ID = "gphoto$id",
+            TAG_T = "$t",
             TAG_ALBUM_TITLE = "title";
+
+    private View mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_splash);
+        mLayout = findViewById(R.id.main_content);
 
         pbLoader = (ProgressBar) findViewById(R.id.pbLoader);
         pbLoader.setVisibility(View.VISIBLE);
@@ -97,9 +103,8 @@ public class SplashActivity extends Activity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.msg_unknown_error),
-                            Toast.LENGTH_LONG).show();
+                    Snackbar.make(mLayout, getApplicationContext().getString(R.string.msg_unknown_error),
+                            Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -109,10 +114,11 @@ public class SplashActivity extends Activity {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Volley Error: " + error.getMessage());
 
-                // show error toast
-                Toast.makeText(getApplicationContext(),
-                        ("Error: " + error.getMessage()),
-                        Toast.LENGTH_LONG).show();
+                View view = findViewById(R.id.main_content);
+                // show error snackbar
+                Snackbar.make(view, ("Error: " + error.getMessage()),
+                        Snackbar.LENGTH_LONG).show();
+
 
                 // Unable to fetch albums
                 // check for existing Albums data in Shared Preferences

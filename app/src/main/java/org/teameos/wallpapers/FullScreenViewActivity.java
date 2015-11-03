@@ -11,14 +11,20 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
@@ -89,8 +95,8 @@ public class FullScreenViewActivity extends Activity
             fetchFullResolutionImage();
 
         } else {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.msg_unknown_error), Toast.LENGTH_SHORT)
+            Snackbar.make(mLayout, R.string.msg_unknown_error,
+                    Snackbar.LENGTH_SHORT)
                     .show();
         }
     }
@@ -157,11 +163,29 @@ public class FullScreenViewActivity extends Activity
 
                                 @Override
                                 public void onErrorResponse(
-                                        VolleyError arg0) {
-                                    Toast.makeText(
-                                            getApplicationContext(),
-                                            ("Error: " + arg0.getMessage()),
-                                            Toast.LENGTH_LONG).show();
+                                        VolleyError error) {
+                                    Log.e(TAG, "Error: " + error.getMessage());
+                                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                        Snackbar.make(mLayout, R.string.error_NoConnectionError,
+                                                Snackbar.LENGTH_LONG)
+                                                .show();
+                                    } else if (error instanceof AuthFailureError) {
+                                        Snackbar.make(mLayout, R.string.error_AuthFailureError,
+                                                Snackbar.LENGTH_LONG)
+                                                .show();
+                                    } else if (error instanceof ServerError) {
+                                        Snackbar.make(mLayout, R.string.error_ServerError,
+                                                Snackbar.LENGTH_LONG)
+                                                .show();
+                                    } else if (error instanceof NetworkError) {
+                                        Snackbar.make(mLayout, R.string.error_NetworkError,
+                                                Snackbar.LENGTH_LONG)
+                                                .show();
+                                    } else if (error instanceof ParseError) {
+                                        Snackbar.make(mLayout, R.string.error_ParseError,
+                                                Snackbar.LENGTH_LONG)
+                                                .show();
+                                    }
                                 }
 
                                 @Override
@@ -188,9 +212,9 @@ public class FullScreenViewActivity extends Activity
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.msg_unknown_error),
-                            Toast.LENGTH_LONG).show();
+                    Snackbar.make(mLayout, R.string.msg_unknown_error,
+                            Snackbar.LENGTH_LONG)
+                            .show();
                 }
 
             }
@@ -199,13 +223,28 @@ public class FullScreenViewActivity extends Activity
             @Override
             public void onErrorResponse(VolleyError error) {
                 LogHelper.e(TAG, "Error: " , error.getMessage());
-                // unable to fetch wallpapers
-                // either google username is wrong or
-                // devices doesn't have internet connection
-                Toast.makeText(getApplicationContext(),
-                        ("Error: " + error.getMessage()),
-                        Toast.LENGTH_LONG).show();
-
+                Log.e(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Snackbar.make(mLayout, R.string.error_NoConnectionError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof AuthFailureError) {
+                    Snackbar.make(mLayout, R.string.error_AuthFailureError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof ServerError) {
+                    Snackbar.make(mLayout, R.string.error_ServerError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof NetworkError) {
+                    Snackbar.make(mLayout, R.string.error_NetworkError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof ParseError) {
+                    Snackbar.make(mLayout, R.string.error_ParseError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                }
             }
         });
 
@@ -234,7 +273,7 @@ public class FullScreenViewActivity extends Activity
                 break;
             // button Set As Wallpaper tapped
             case R.id.fabSetWallpaper:
-                utils.setAsWallpaper(bitmap);
+                utils.setAsWallpaper(mLayout, bitmap);
                 break;
             default:
                 break;
@@ -249,7 +288,7 @@ public class FullScreenViewActivity extends Activity
             requestStoragePermissions();
         } else {
             // Storage permissions have been granted. Save wallpaper.
-            utils.saveImageToSDCard(bitmap, title);
+            utils.saveImageToSDCard(mLayout, bitmap, title);
         }
     }
 

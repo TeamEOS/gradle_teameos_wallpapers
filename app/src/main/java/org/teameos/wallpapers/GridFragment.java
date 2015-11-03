@@ -3,7 +3,9 @@ package org.teameos.wallpapers;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,10 +15,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -175,9 +182,9 @@ public class GridFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity(),
-                            getString(R.string.msg_unknown_error),
-                            Toast.LENGTH_LONG).show();
+                    View view = getActivity().findViewById(R.id.main_content);
+                    Snackbar.make(view, getString(R.string.msg_unknown_error),
+                            Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -186,13 +193,29 @@ public class GridFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Error: " + error.getMessage());
-                // unable to fetch wallpapers
-                // either google username is wrong or
-                // devices doesn't have internet connection
-                Toast.makeText(getActivity(),
-                        ("Error: " + error.getMessage()),
-                        Toast.LENGTH_LONG).show();
+                View view = getActivity().findViewById(R.id.main_content);
 
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Snackbar.make(view, R.string.error_NoConnectionError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof AuthFailureError) {
+                    Snackbar.make(view, R.string.error_AuthFailureError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof ServerError) {
+                    Snackbar.make(view, R.string.error_ServerError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof NetworkError) {
+                    Snackbar.make(view, R.string.error_NetworkError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } else if (error instanceof ParseError) {
+                    Snackbar.make(view, R.string.error_ParseError,
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                }
             }
         });
 

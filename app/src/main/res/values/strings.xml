@@ -20,4 +20,11 @@
     <string name="permision_available_storage">Storage Permissions have been granted. Wallpaper can now be saved</string>
 
     <string name="ok">OK</string>
+
+    <string name="error_NoConnectionError">Error: No internet connection</string>
+    <string name="error_AuthFailureError">Error: AuthFailureError</string>
+    <string name="error_ServerError">Error: ServerError</string>
+    <string name="error_NetworkError">Error: NetworkError</string>
+    <string name="error_ParseError">Error: ParseError</string>
+
 </resources>
