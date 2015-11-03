@@ -38,7 +38,7 @@ public class FullScreenViewActivity extends Activity
         implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = FullScreenViewActivity.class.getSimpleName();
     public static final String TAG_SEL_IMAGE = "selectedImage";
-    public static String imageTitle;
+    private static String imageTitle;
     private Wallpaper selectedPhoto;
     private ImageView fullImageView;
     private FloatingActionButton fabDownload;
@@ -47,7 +47,7 @@ public class FullScreenViewActivity extends Activity
     private ProgressBar pbLoader;
 
     private static final int REQUEST_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private static final String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private View mLayout;
 
     // Picasa JSON response node keys
@@ -241,7 +241,7 @@ public class FullScreenViewActivity extends Activity
         }
     }
 
-    public void saveImageToSDCard(Bitmap bitmap, String title) {
+    private void saveImageToSDCard(Bitmap bitmap, String title) {
         // Verify that all required storage permissions have been granted.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

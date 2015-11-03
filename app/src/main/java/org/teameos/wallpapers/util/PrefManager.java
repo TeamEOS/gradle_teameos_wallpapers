@@ -22,15 +22,6 @@ public class PrefManager {
     // Shared Preferences
     private SharedPreferences pref;
 
-    // Editor for Shared preferences
-    private Editor editor;
-
-    // Context
-    private Context _context;
-
-    // Shared pref mode
-    private int PRIVATE_MODE = 0;
-
     // Sharedpref file name
     private static final String PREF_NAME = "EOS-Wallpapers";
 
@@ -47,8 +38,9 @@ public class PrefManager {
     private static final String KEY_ALBUMS = "albums";
 
     public PrefManager(Context context) {
-        this._context = context;
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        Context mContext = context;
+        int PRIVATE_MODE = 0;
+        pref = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
 
     }
 
@@ -68,7 +60,7 @@ public class PrefManager {
      * Storing albums in shared preferences
      */
     public void storeCategories(List<Category> albums) {
-        editor = pref.edit();
+        Editor editor = pref.edit();
         Gson gson = new Gson();
 
         Log.d(TAG, "Albums: " + gson.toJson(albums));

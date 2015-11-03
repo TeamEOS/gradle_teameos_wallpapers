@@ -1,18 +1,10 @@
 package org.teameos.wallpapers.util;
 
-import android.app.Activity;
-import android.app.Application;
 import android.app.WallpaperManager;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -20,11 +12,8 @@ import android.widget.Toast;
 
 import org.teameos.wallpapers.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 import java.util.Random;
 
 public class Utils {
@@ -120,34 +109,5 @@ public class Utils {
                     _context.getString(R.string.toast_wallpaper_set_failed),
                     Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private int getWidth(Activity activity) {
-        WallpaperManager wallpaperManager
-                = WallpaperManager.getInstance(activity);
-        try {
-            return wallpaperManager.getDesiredMinimumWidth();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    private int getHeight(Activity activity) {
-        WallpaperManager wallpaperManager
-                = WallpaperManager.getInstance(activity);
-        try {
-            return wallpaperManager.getDesiredMinimumHeight();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    private Uri getImageUri(Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(_context.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 }
