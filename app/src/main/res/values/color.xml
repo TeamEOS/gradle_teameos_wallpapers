@@ -4,8 +4,8 @@
     <color name="list_item_title">#000000</color>
     <color name="list_background">#ffffff</color>
     <color name="list_background_pressed">#CFD8DC</color>
-    <color name="grid_bg">#ffffff</color>
-    <color name="grid_item_bg">#ffffff</color>
+    <color name="grid_bg">#000000</color>
+    <color name="grid_item_bg">#000000</color>
     <color name="action_bar">#ffffff</color>
     <color name="action_bar_title">#000000</color>
      <color name="black">#000000</color>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -196,9 +197,17 @@ public class GridFragment extends Fragment {
                 View view = getActivity().findViewById(R.id.main_content);
 
                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                    Snackbar.make(view, R.string.error_NoConnectionError,
-                            Snackbar.LENGTH_LONG)
-                            .show();
+                    Snackbar snackBar = Snackbar.make(view, R.string.error_NoConnectionError, Snackbar.LENGTH_LONG);
+                    snackBar.setAction("Settings", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                            startActivity(i);
+                            getActivity().finish();
+
+                        }
+                    });
+                    snackBar.show();
                 } else if (error instanceof AuthFailureError) {
                     Snackbar.make(view, R.string.error_AuthFailureError,
                             Snackbar.LENGTH_LONG)
